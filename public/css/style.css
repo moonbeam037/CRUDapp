@@ -1,0 +1,11 @@
+.change-form {
+    padding-bottom: 20px;
+}
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#tableList {
+    min-width: 10em;
+}

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title><!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="container-fluid">
+        <% if (data) { %>
+            <div class="row">
+                <div id="tableList" class="list-group col-md-1">
+                    <% for(let table of tables) { %>
+                        <% if(table.table_name==tableName) { %>
+                            <a href="/admin?table=<%=table.table_name%>" class="list-group-item active"><%=table.table_name%></a>
+                            <% } else { %>
+                                <a href="/admin?table=<%=table.table_name%>" class="list-group-item"><%=table.table_name%></a>
+                                <% } } %>
+                </div>
+                <div class="col-md-3 col-md-offset-3 change-form">
+                    <form id="myForm">
+                        <div class="form-group">
+                            <h3 id="tableName"><%=tableName%></h3>
+                        </div>
+                        <% for (let field of data.fields) { %>
+                            <% if(field.name=="id" ) continue; %>
+                                <div class="form-group">
+                                    <label for="<%=field.name%>"><%=field.name%><% if(field.name=="typeofticket" ) { %> <span class="text-info"> *Взрослый / Детский</span><% } %></label>
+                                    <input <% if (field.name.includes('date') || field.name.includes('Date')) { %>
+                                    type="date" <% } else { %> type="text" <% } %> id="<%=field.name%>"
+                                                class="form-control" name="<%=field.name%>">
+                                </div>
+                                <% } %>
+                                    <button type="button" id="addBtn" class="btn btn-default">Submit</button>
+                                    <span style="display: none;" id="cancelSpan"><button type="button" id="cancelBtn"
+                                            onclick="cancel()" class="btn btn-danger">cancel</button></span>
+                    </form>
+                </div>
+            </div>
+            <div class="row">
+                <table id="tab" class="table">
+                    <tr>
+                        <% for (let field of data.fields) { %>
+                            <th><%=field.name%></th>
+                            <% } %>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                    </tr>
+                    <% for (let row of data.rows) { %>
+                        <tr>
+                            <% for(let prop of Object.values(row)) { %>
+                                <td><%=prop%></td>
+                                <% } %>
+                                    <td><button onclick="editItem(this)" id="editBtn" class="btn btn-info">Edit</button>
+                                    </td>
+                                    <td><button id="myBtn" onclick="deleteItem(this)"class="btn btn-danger btn-sm">Delete</button></td>
+                        </tr>
+                        <% } %>
+                </table>
+            </div>
+            <% } else { %>
+                <h1>ERROR 404</h1>
+                <% } %>
+    </div>
+    <%- include('footer.ejs') %>
+</body>
+
+</html>
